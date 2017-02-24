@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArithmeticSolver
-{
-    public class Class1
-    {
+namespace ArithmeticSolver.Models {
+    public class Term : IExpression {
+        public Token Token { get; set; }
     }
 }

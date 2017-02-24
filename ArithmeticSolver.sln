@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArithmeticSolver", "ArithmeticSolver\ArithmeticSolver.csproj", "{A34B2766-105D-42A1-BC1A-54A3149321FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArithmeticSolverTestProject", "ArithmeticSolverTestProject\ArithmeticSolverTestProject.csproj", "{A8D7BD91-D668-4318-9589-D0309E751682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A34B2766-105D-42A1-BC1A-54A3149321FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A34B2766-105D-42A1-BC1A-54A3149321FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A34B2766-105D-42A1-BC1A-54A3149321FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8D7BD91-D668-4318-9589-D0309E751682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8D7BD91-D668-4318-9589-D0309E751682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8D7BD91-D668-4318-9589-D0309E751682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8D7BD91-D668-4318-9589-D0309E751682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
