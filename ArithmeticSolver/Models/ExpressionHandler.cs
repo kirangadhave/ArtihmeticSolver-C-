@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace ArithmeticSolver.Models {
     public static class ExpressionHandler {
+
+        /// <summary>
+        /// Takes Tokens as input to build a Binary Expression.
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns>A Binary Expression object</returns>
         public static IExpression Build ( IEnumerable<Token> tokens ) {
             var exp = default(IExpression);
 
@@ -43,6 +49,7 @@ namespace ArithmeticSolver.Models {
                         }
                 }
             }
+            
             if (tokens.First().Value == "(" && tokens.Last().Value == ")") {
                 var list = tokens.ToList();
                 list.Remove(list.First());
@@ -53,6 +60,12 @@ namespace ArithmeticSolver.Models {
             return exp;
         }
 
+        /// <summary>
+        /// Recursively solves the binary expression and gives out double as a result.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="valueDict"></param>
+        /// <returns></returns>
         public static double Solve( this IExpression expression, Dictionary<string, double> valueDict) {
             if(expression is Term) {
                 var term = expression as Term;
@@ -76,6 +89,7 @@ namespace ArithmeticSolver.Models {
         }
 
         static double Evaluate ( double left, Operator op, double right ) {
+            
             switch (op.Token.Value) {
                 case "+":
                         return left + right;
@@ -83,13 +97,16 @@ namespace ArithmeticSolver.Models {
                         return left - right;
                 case "*":
                         return left * right;
-                case "/":
-                        return left / right;
+                case "/": {
+                        if (right.IsZero())
+                            return left / right;
+                        throw new ArgumentException("Right Hand Side value evaluates to 0");
+                    } 
                 default:
                     throw new ArgumentException("Wrong Operator");
             }
         }
 
-
+        static bool IsZero( this double d ) => Math.Abs(d - 0.0) > 0.0001;
     }
 }

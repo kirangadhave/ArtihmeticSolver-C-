@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ArithmeticSolver {
     public class Lexer {
+        List<Token> Tokens { get; set; }
         public string Equation { get; set; }
         bool HasVariables { get; set; }
         Token Current { get; set; }
@@ -19,19 +21,91 @@ namespace ArithmeticSolver {
             IS = new InputStream(Equation);
         }
 
+        public override string ToString () {
+            return string.Join("", Tokens.Select(x=>x.Value));
+        }
+
         public IEnumerable<Token> Tokenize () {
-            var tokens = new List<Token>();
+            Tokens = new List<Token>();
             if (Equation == null)
                 throw new Exception("Equation string is null");
 
             do {
                 try {
-                    tokens.Add(Next());
+                    Tokens.Add(Next());
                 } catch(Exception ex) { Debug.WriteLine(ex); }
             } while (!EOF);
 
+            VerifyTokens();
 
-            return tokens;
+            ApplyBodmas();
+
+            return Tokens;
+        }
+
+        void VerifyTokens () {
+            Tokens.ForEach(x => {
+                var error = false;
+                if (x.Type == TokenType.Operator) {
+                    var index = Tokens.IndexOf(x);
+                    if (index > 0 && Tokens[index - 1].Type == TokenType.Operator)
+                        error = true;
+                    if (index < Tokens.Count && Tokens[index + 1].Type == TokenType.Operator)
+                        error = true;
+                    if (error)
+                        throw new Exception("Equation improper");
+                }
+            });  
+        }
+
+        void ApplyBodmas () {
+            var tokens = Tokens.ToList();
+            var ops = tokens.Count(x => x.Type == TokenType.Operator && (x.Value == "*" || x.Value == "/"));
+            var total = ops;
+            while (ops != 0) {
+                var skip = total - ops;
+                foreach(var token in tokens) {
+                    if(token.Type == TokenType.Operator && (token.Value == "*" || token.Value == "/")) {
+                        if (skip == 0) {
+                            var index = tokens.IndexOf(token);
+                            if (index == 0 || index == tokens.Count)
+                                throw new Exception("Operator Position Exception");
+
+
+                            switch (tokens[index + 1].Type) {
+                                case TokenType.Number:
+                                case TokenType.Variable: {
+                                        tokens.Insert(index + 2, new Token { Type = TokenType.EndParenthesis, Value = ")" });
+                                        break;
+                                    }
+                                case TokenType.StartParenthesis: {
+
+                                        break;
+                                    }
+                            }
+
+                            switch (tokens[index - 1].Type) {
+                                case TokenType.Number:
+                                case TokenType.Variable: {
+                                        tokens.Insert(index - 1, new Token { Type = TokenType.StartParenthesis, Value = "(" });
+                                        break;
+                                    }
+                                case TokenType.EndParenthesis: {
+
+                                        break;
+                                    }
+                            }
+
+                            ops--;
+                        } else {
+                            skip--;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            Tokens = tokens;
         }
 
         #region Read Functions
