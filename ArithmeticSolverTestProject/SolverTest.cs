@@ -7,7 +7,7 @@ namespace ArithmeticSolverTestProject {
     public class SolverTest {
         [TestMethod]
         public void TestSolver () {
-            Solver.Solve("2+3*5");
+            Solver.Solve("2+(3-2)/(5-2)");
         }
     }
 }

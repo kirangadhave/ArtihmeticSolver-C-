@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ArithmeticSolver.Models {
@@ -54,7 +55,9 @@ namespace ArithmeticSolver.Models {
                 var list = tokens.ToList();
                 list.Remove(list.First());
                 list.Remove(list.Last());
-                exp = Build(list);
+                var s = string.Join("", list.Select(x => x.Value));
+                if(Regex.IsMatch(s, @".*\(.*\).*") || !(s.Contains("(") && s.Contains(")")))
+                    exp = Build(list);
             }
 
             return exp;

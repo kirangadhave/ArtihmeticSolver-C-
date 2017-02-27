@@ -71,7 +71,6 @@ namespace ArithmeticSolver {
                             if (index == 0 || index == tokens.Count)
                                 throw new Exception("Operator Position Exception");
 
-
                             switch (tokens[index + 1].Type) {
                                 case TokenType.Number:
                                 case TokenType.Variable: {
@@ -79,7 +78,19 @@ namespace ArithmeticSolver {
                                         break;
                                     }
                                 case TokenType.StartParenthesis: {
-
+                                        foreach(var a in tokens) {
+                                            if (tokens.IndexOf(a) > index) {
+                                                if(a.Type == TokenType.EndParenthesis) {
+                                                    var l = tokens.GetRange(index + 2, (tokens.IndexOf(a) - index) - 2);
+                                                    if (l.Count(x => x.Type == TokenType.StartParenthesis) == l.Count(x=>x.Type == TokenType.EndParenthesis)){
+                                                        tokens.Insert(tokens.IndexOf(a) + 1, new Token { Type = TokenType.EndParenthesis, Value = ")" });
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //tokens.Insert(index + 1, new Token { Type = TokenType.StartParenthesis, Value = "(" });
+                                        
                                         break;
                                     }
                             }
@@ -91,7 +102,21 @@ namespace ArithmeticSolver {
                                         break;
                                     }
                                 case TokenType.EndParenthesis: {
-
+                                        foreach (var a in tokens) {
+                                            if (tokens.IndexOf(a) < index) {
+                                                if (a.Type == TokenType.StartParenthesis) {
+                                                    var l = tokens.GetRange(tokens.IndexOf(a) + 1, (index - tokens.IndexOf(a)) - 2);
+                                                    if (l.Count(x => x.Type == TokenType.StartParenthesis) == l.Count(x => x.Type == TokenType.EndParenthesis)) {
+                                                        tokens.Insert(tokens.IndexOf(a), new Token { Type = TokenType.StartParenthesis, Value = "(" });
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        //tokens.Insert(index, new Token { Type = TokenType.EndParenthesis, Value = ")" });
                                         break;
                                     }
                             }
@@ -104,8 +129,8 @@ namespace ArithmeticSolver {
                     }
                 }
             }
-
             Tokens = tokens;
+            var s = ToString();
         }
 
         #region Read Functions
