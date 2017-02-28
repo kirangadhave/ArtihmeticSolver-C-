@@ -24,7 +24,7 @@ namespace ArithmeticSolver {
 
             var expression = ExpressionHandler.Build(tokens.ToList());
             var answer = expression.Solve(variableDictionary);
-            return 0;
+            return answer;
         }
     }
 }
